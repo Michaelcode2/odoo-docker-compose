@@ -1,0 +1,75 @@
+version: "3.8"
+
+services:
+  caddy:
+    image: caddy:latest
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+      - ./caddy_config/Caddyfile:/etc/caddy/Caddyfile
+    depends_on:
+      - odoo
+    networks:
+      - odoo-network
+
+  postgres:
+    image: postgres:16
+    restart: always
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-odoo}
+      - POSTGRES_USER=${POSTGRES_USER:-odoo}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -h localhost -U ${POSTGRES_USER:-odoo} -d ${POSTGRES_DB:-odoo}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - odoo-network
+
+  odoo:
+    image: odoo:19.0
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8069:8069"
+      - "8072:8072"  # Longpolling port
+    environment:
+      - HOST=postgres
+      - USER=${POSTGRES_USER:-odoo}
+      - PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - odoo_data:/var/lib/odoo
+      - odoo_config:/etc/odoo
+      - odoo_addons:/mnt/extra-addons
+    networks:
+      - odoo-network
+
+volumes:
+  caddy_data:
+    external: true
+  caddy_config:
+    external: true
+  postgres_data:
+    external: true
+  odoo_data:
+    external: true
+  odoo_config:
+    external: true
+  odoo_addons:
+    external: true
+
+networks:
+  odoo-network:
+    driver: bridge
+
