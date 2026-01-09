@@ -29,21 +29,40 @@ nano .env
 ```
 
 **Required settings:**
-- `DOMAIN_NAME`: Your domain (e.g., odoo.example.com)
 - `POSTGRES_PASSWORD`: A strong password for the database
 
 **Example:**
 ```env
-DOMAIN_NAME=odoo.example.com
 POSTGRES_DB=odoo
 POSTGRES_USER=odoo
 POSTGRES_PASSWORD=MySecurePassword123!
 TZ=Europe/Kiev
 ```
 
+**Note:** Your domain is configured separately in the Caddyfile (next step).
+
 Save and exit (Ctrl+X, then Y, then Enter).
 
-### Step 3: Verify Domain Configuration
+### Step 3: Update Caddyfile with Your Domain
+
+Edit the Caddyfile:
+
+```bash
+nano caddy_config/Caddyfile
+```
+
+**Replace line 2** with your actual domain:
+```caddy
+# Change this:
+odoo.yourdomain.com {
+
+# To your domain:
+odoo.example.com {
+```
+
+Save and exit (Ctrl+X, then Y, then Enter).
+
+### Step 4: Verify Domain Configuration
 
 Make sure your domain's DNS A record points to your server's IP address:
 
@@ -53,7 +72,7 @@ dig +short your-domain.com
 
 This should return your server's IP address.
 
-### Step 4: Start Services
+### Step 5: Start Services
 
 ```bash
 docker compose up -d
@@ -64,7 +83,7 @@ This will:
 - Start all services
 - Automatically obtain SSL certificate from Let's Encrypt
 
-### Step 5: Access Odoo
+### Step 6: Access Odoo
 
 1. Open your browser and go to `https://your-domain.com`
 2. You'll see the Odoo database creation page

@@ -14,7 +14,7 @@ This deployment includes:
 ### Prerequisites
 
 - Docker Engine 20.10+
-- Docker Compose 2.0+
+- Docker Compose v2.0+ (modern syntax without version field)
 - A domain name pointing to your server (for SSL certificates)
 
 ### Installation Steps
@@ -40,8 +40,11 @@ This deployment includes:
    nano .env
    ```
 
-4. **Update the Caddyfile:**
-   Edit `caddy_config/Caddyfile` and replace the domain name with your actual domain.
+4. **Update the Caddyfile with your domain:**
+   ```bash
+   nano caddy_config/Caddyfile
+   ```
+   Replace `odoo.yourdomain.com` on line 2 with your actual domain name.
 
 5. **Start the services:**
    ```bash
@@ -60,7 +63,6 @@ Create a `.env` file in the project root with the following variables:
 
 | Variable | Description | Default | Required |
 |----------|-------------|---------|----------|
-| `DOMAIN_NAME` | Your domain name for Odoo | odoo.yourdomain.com | Yes |
 | `POSTGRES_DB` | PostgreSQL database name | odoo | No |
 | `POSTGRES_USER` | PostgreSQL username | odoo | No |
 | `POSTGRES_PASSWORD` | PostgreSQL password | - | **Yes** |
@@ -68,12 +70,13 @@ Create a `.env` file in the project root with the following variables:
 
 **Example .env file:**
 ```env
-DOMAIN_NAME=odoo.yourdomain.com
 POSTGRES_DB=odoo
 POSTGRES_USER=odoo
 POSTGRES_PASSWORD=SuperSecurePassword123!
 TZ=Europe/Kiev
 ```
+
+**Note:** Your domain is configured in `caddy_config/Caddyfile`, not in the `.env` file.
 
 ### Caddyfile Configuration
 
@@ -85,9 +88,10 @@ The Caddyfile is located at `caddy_config/Caddyfile`. It's configured to:
 - Enable compression (gzip, zstd)
 - Add security headers
 
-**Important:** Update the domain in the Caddyfile:
+**Important:** Update the domain in the Caddyfile (line 2):
 ```caddy
-{$DOMAIN_NAME} {
+# Replace with your actual domain
+odoo.yourdomain.com {
     # ... configuration
 }
 ```

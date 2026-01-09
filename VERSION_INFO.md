@@ -2,11 +2,12 @@
 
 ## Current Deployment Versions
 
-| Component   | Version | Docker Image        |
-|-------------|---------|---------------------|
-| Odoo        | 19.0    | `odoo:19.0`        |
-| PostgreSQL  | 16      | `postgres:16`      |
-| Caddy       | Latest  | `caddy:latest`     |
+| Component      | Version | Docker Image        |
+|----------------|---------|---------------------|
+| Odoo           | 19.0    | `odoo:19.0`        |
+| PostgreSQL     | 16      | `postgres:16`      |
+| Caddy          | Latest  | `caddy:latest`     |
+| Docker Compose | v2+     | Modern syntax (no version field) |
 
 ## Version Compatibility Matrix
 

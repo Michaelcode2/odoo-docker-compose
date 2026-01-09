@@ -58,19 +58,22 @@ else
 fi
 
 # Check if Caddyfile is configured
-if grep -q "DOMAIN_NAME" caddy_config/Caddyfile; then
-    echo "✅ Caddyfile is configured with environment variable"
+if grep -q "odoo.yourdomain.com" caddy_config/Caddyfile; then
+    echo "⚠️  Please update your domain in caddy_config/Caddyfile"
+    echo "   Replace 'odoo.yourdomain.com' with your actual domain"
 else
-    echo "⚠️  Please ensure your domain is configured in caddy_config/Caddyfile"
+    echo "✅ Caddyfile appears to be configured"
 fi
 
 echo ""
 echo "🎉 Setup complete!"
 echo ""
 echo "Next steps:"
-echo "1. Edit .env file:        nano .env"
-echo "2. Start services:        docker compose up -d"
-echo "3. View logs:             docker compose logs -f"
-echo "4. Access Odoo at:        https://your-domain.com"
+echo "1. Edit .env file:           nano .env"
+echo "2. Edit Caddyfile:           nano caddy_config/Caddyfile"
+echo "   (Replace odoo.yourdomain.com with your actual domain)"
+echo "3. Start services:           docker compose up -d"
+echo "4. View logs:                docker compose logs -f"
+echo "5. Access Odoo at:           https://your-domain.com"
 echo ""
 

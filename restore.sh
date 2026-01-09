@@ -131,6 +131,6 @@ echo "🎉 Restore completed!"
 echo ""
 echo "Next steps:"
 echo "1. Check logs:        docker compose logs -f odoo"
-echo "2. Access Odoo:       https://${DOMAIN_NAME:-your-domain.com}"
+echo "2. Access Odoo:       https://your-domain.com"
 echo ""
 

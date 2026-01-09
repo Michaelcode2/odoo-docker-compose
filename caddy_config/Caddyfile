@@ -1,4 +1,5 @@
-{$DOMAIN_NAME} {
+# Replace 'odoo.yourdomain.com' with your actual domain name
+odoo.yourdomain.com {
     # Enable compression
     encode gzip zstd
 
@@ -8,8 +9,8 @@
     }
     reverse_proxy @longpolling odoo:8072 {
         header_up Host {host}
-        header_up X-Real-IP {remote}
-        header_up X-Forwarded-For {remote}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
         header_up X-Forwarded-Proto {scheme}
     }
 
@@ -20,8 +21,8 @@
         
         # Set common headers
         header_up Host {host}
-        header_up X-Real-IP {remote}
-        header_up X-Forwarded-For {remote}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
         header_up X-Forwarded-Proto {scheme}
         
         # WebSocket support
