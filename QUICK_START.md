@@ -83,9 +83,13 @@ This will:
 - Start all services
 - Automatically obtain SSL certificate from Let's Encrypt
 
-### Step 6: Access Odoo
+### Step 6: Initialize Odoo Database
 
-1. Open your browser and go to `https://your-domain.com`
+On first startup, Odoo needs to initialize the database. You have two options:
+
+#### Option A: Initialize via Web Interface (Recommended)
+
+1. Open your browser and go to `https://your-domain.com` or `http://localhost:8069`
 2. You'll see the Odoo database creation page
 3. Fill in the form:
    - **Database Name**: Choose a name (e.g., "production")
@@ -95,6 +99,18 @@ This will:
    - **Language**: Select your language
    - **Country**: Select your country
 4. Click "Create Database"
+
+#### Option B: Initialize via Command Line
+
+If the web interface shows errors or doesn't load properly, initialize manually:
+
+```bash
+docker compose down
+docker compose run --rm odoo odoo -d odoo -i base --stop-after-init
+docker compose up -d
+```
+
+This will initialize the database with base modules and restart all services.
 
 ## Post-Installation
 
@@ -153,6 +169,40 @@ docker compose up -d
 
 ## Troubleshooting
 
+### Database Not Initialized Error
+
+If you see errors like:
+```
+ERROR ? odoo.modules.loading: Database odoo not initialized, you can force it with `-i base`
+KeyError: 'ir.http'
+```
+
+**Solution:** Initialize the database manually:
+
+```bash
+docker compose down
+docker compose run --rm odoo odoo -d odoo -i base --stop-after-init
+docker compose up -d
+```
+
+After this, access Odoo at `https://your-domain.com` or `http://localhost:8069`.
+
+You should see the Odoo Database Manager page where you can:
+- Master Password: Leave blank or set a master password (this protects database management)
+- Database Name: The database "odoo" should already exist and be listed
+- Click on "odoo" to access it, and you'll be prompted to create the first admin user
+
+Create a new (company) Database with Admin User:
+- Look for the "Create Database" section
+- Click "Create Database"
+  - This will create a new database and set up your admin account
+  - It may take a few minutes
+- After creation, you'll be logged in automatically or can log in with:
+  - Email: The email you just entered
+  - Password: The password you just set
+
+Note: The "odoo" database that was initialized is just the base structure - you still need to create a company database with your admin user!
+
 ### SSL Certificate Not Working
 
 1. Make sure your domain points to the correct IP
@@ -207,4 +257,18 @@ Backups are stored in the `./backups` directory.
 ---
 
 **That's it!** You now have a production-ready Odoo installation with automatic SSL certificates. 🎉
+
+## Next Steps
+
+📘 **[Post-Deployment Configuration Guide](POST_DEPLOYMENT.md)** - Essential steps to properly configure your Odoo instance:
+- Security configuration (2FA, password policies)
+- Email setup (SMTP/IMAP)
+- User management and permissions
+- Company settings
+- Automated backups
+- Performance optimization
+- Module installation
+- System maintenance
+
+Make sure to review and complete the post-deployment checklist!
 

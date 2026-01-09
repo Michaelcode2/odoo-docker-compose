@@ -51,9 +51,18 @@ This deployment includes:
    docker compose up -d
    ```
 
-6. **Access Odoo:**
+6. **Initialize Odoo database:**
+   
+   **Option A:** Via web interface (recommended):
    - Open your browser and navigate to your domain (e.g., https://odoo.yourdomain.com)
    - Create your first database and set up the admin account
+   
+   **Option B:** Via command line (if web interface shows errors):
+   ```bash
+   docker compose down
+   docker compose run --rm odoo odoo -d odoo -i base --stop-after-init
+   docker compose up -d
+   ```
 
 ## ⚙️ Configuration
 
@@ -192,6 +201,21 @@ docker run --rm -v odoo_data:/data -v $(pwd):/backup ubuntu tar xzf /backup/odoo
 
 ## 🔧 Troubleshooting
 
+### Database Not Initialized Error
+
+If you see errors like:
+```
+ERROR ? odoo.modules.loading: Database odoo not initialized, you can force it with `-i base`
+KeyError: 'ir.http'
+```
+
+**Solution:** Initialize the database manually:
+```bash
+docker compose down
+docker compose run --rm odoo odoo -d odoo -i base --stop-after-init
+docker compose up -d
+```
+
 ### Check service status
 ```bash
 docker compose ps
@@ -244,6 +268,13 @@ To add custom Odoo modules:
 4. **Keep Docker images updated** regularly
 5. **Use fail2ban** to protect against brute force attacks
 6. **Enable two-factor authentication** in Odoo for admin users
+
+## 📘 Documentation
+
+- **[Quick Start Guide](QUICK_START.md)** - Step-by-step deployment instructions
+- **[Post-Deployment Configuration](POST_DEPLOYMENT.md)** - Essential configuration after installation
+- **[Version Information](VERSION_INFO.md)** - Compatibility and version details
+- **[Changelog](CHANGELOG.md)** - Version history and updates
 
 ## 📚 References
 
